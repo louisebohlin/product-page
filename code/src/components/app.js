@@ -1,16 +1,32 @@
 import React from "react"
 import Product from "./product"
-const productsJson = require("../products.json")
+const productsAPI = "http://localhost:8080/products"
 
-console.log("Products: (Remove this line in app.js!)", productsJson)
+console.log("Products: (Remove this line in app.js!)", productsAPI)
 
 class App extends React.Component {
+
+state = {
+  products: []
+  }
+
+  componentDidMount() {
+    fetch(productsAPI)
+      .then(response => {
+      return response.json()
+    })
+    .then(json => {
+      this.setState({
+        products: json
+      })
+    })
+  }
 
   render() {
     return (
       <div className="header"><h1>Produkter</h1>
         <div className="App">
-          {productsJson.products.map((product) => {
+          {this.state.products.map((product) => {
             return <Product title={product.name}
                   image={product.image}
                   type={product.type}
